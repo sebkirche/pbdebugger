@@ -1,0 +1,6 @@
+﻿$PBExportHeader$exception_debug_info.srs
+global type exception_debug_info from structure
+	exception_record ExceptionRecord
+	ulong dwFirstChance
+end type
+

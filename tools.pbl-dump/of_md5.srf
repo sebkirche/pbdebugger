@@ -1,0 +1,87 @@
+﻿$PBExportHeader$of_md5.srf
+global type of_md5 from function_object
+end type
+
+type prototypes
+FUNCTION Ulong GetLastError () Library "kernel32.dll"
+FUNCTION Boolean CrAcquireContext (ref ulong hProv, ref string pszContainer, ref string pszProvider, ulong dwProvType, ulong dwFlags) LIBRARY "advapi32.dll" alias for "CryptAcquireContextA;ansi"
+FUNCTION Boolean CrReleaseContext (ulong hProv, ulong dwFlags) LIBRARY "advapi32.dll" alias for "CryptReleaseContext"
+FUNCTION Boolean CrCreateHash (ulong hProv, uint Algid, ulong hKey, ulong dwFlags, ref ulong phHash) LIBRARY "advapi32.dll" alias for "CryptCreateHash"
+FUNCTION Boolean CrHashData (ulong hHash,  ref string pbData, ulong dwDataLen, ulong dwFlags) LIBRARY "advapi32.dll" alias for "CryptHashData;ansi"
+FUNCTION Boolean CrDestroyHash (ulong hHash) LIBRARY "advapi32.dll" alias for "CryptDestroyHash"
+FUNCTION Boolean CrGetHashParam (ulong hHash, ulong dwParam, ref blob pbData, ref ulong pdwDataLen, ulong dwFlags) LIBRARY "advapi32.dll" alias for "CryptGetHashParam;ansi"
+end prototypes
+
+forward prototypes
+global function string of_md5 (string as_text)
+end prototypes
+
+global function string of_md5 (string as_text);// Constants
+CONSTANT ULONG PROV_RSA_FULL = 1
+CONSTANT ULONG CRYPT_VERIFYCONTEXT  =  4026531840 // 0xF0000000
+CONSTANT ULONG CALG_MD5 = 32771 // 4<<13 | 0 | 3
+CONSTANT ULONG HP_HASHVAL = 2 //  0x0002
+
+// Calculate the MD5 message digest hash of a string
+// Using the Windows Crypto API
+
+ulong MD5LEN = 16
+ulong hProv // provider handle
+ulong hHash // hash object handle
+ulong err_number
+String s_result, s_null
+
+Integer i, l, r, b
+Blob{16} bl_hash
+Blob{1} bl_byte
+
+SetNull (s_null)
+ulong cbHash = 0
+CHAR HexDigits[0 TO 15] = &
+ {'0','1','2','3','4','5','6','7','8','9','a','b','c','d','e','f'}
+
+//Get handle to the crypto provider
+IF NOT CrAcquireContext&
+  (hProv, s_null, s_null, PROV_RSA_FULL, CRYPT_VERIFYCONTEXT) &
+  THEN
+  err_number = GetLastError() 
+  return 'acquire context failed ' + String (err_number)
+END IF
+
+// Create the hash object
+IF NOT CrCreateHash(hProv, CALG_MD5, 0, 0, hHash) THEN
+  err_number = GetLastError()
+  CrReleaseContext(hProv, 0) 
+  return 'create hash failed ' + String (err_number)
+END IF
+
+// Add the input to the hash
+IF NOT CrHashData(hHash, as_text, Len(as_text), 0) THEN
+  err_number = GetLastError()
+  CrDestroyHash(hHash)
+  CrReleaseContext(hProv, 0) 
+  return 'hashdata failed ' + String (err_number)
+END IF
+
+// Get the hash value and convert it to readable characters
+cbHash = MD5LEN
+IF (CrGetHashParam(hHash, HP_HASHVAL, bl_hash, cbHash, 0)) THEN
+  FOR i = 1 TO 16
+	 bl_byte = BlobMid (bl_hash, i, 1) 
+	 b = AscA (String(bl_byte, EncodingANSI!))
+	 r = Mod (b, 16) // right 4 bits
+	 l = b / 16      // left 4 bits
+	 s_result += HexDigits [l] + HexDigits [r]
+  NEXT
+ELSE
+  err_number = GetLastError()
+  return 'gethashparam failed ' + String (err_number)
+END IF
+
+// clean up and return
+CrDestroyHash(hHash)
+CrReleaseContext(hProv, 0)
+
+return s_result
+end function
+

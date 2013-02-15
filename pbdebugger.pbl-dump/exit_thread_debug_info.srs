@@ -1,0 +1,5 @@
+﻿$PBExportHeader$exit_thread_debug_info.srs
+global type exit_thread_debug_info from structure
+	ulong dwExitCode
+end type
+

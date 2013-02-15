@@ -1,0 +1,7 @@
+﻿$PBExportHeader$output_debug_string_info.srs
+global type output_debug_string_info from structure
+	ulong lpDebugStringData
+	uint fUnicode
+	uint nDebugStringLength
+end type
+

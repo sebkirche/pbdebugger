@@ -1,0 +1,26 @@
+﻿$PBExportHeader$getwindowclientwidth.srf
+$PBExportComments$Returns windows client area width
+global type getwindowclientwidth from function_object
+end type
+
+type prototypes
+function long GetSystemMetrics (long nIndex) library "user32.dll"
+function ulong GetClientRect(ulong hwnd,ref st_rect lpRect) library "user32.dll"
+end prototypes
+
+forward prototypes
+global function long getwindowclientwidth (powerobject apo_obj)
+end prototypes
+
+global function long getwindowclientwidth (powerobject apo_obj);// returns the window client width (in PB units)
+
+long ll_pbunits
+st_rect rect
+
+getclientrect( handle(apo_obj), rect)
+ll_pbunits = PixelsToUnits(rect.right - rect.left , XPixelsToUnits!)
+
+return ll_pbunits
+
+end function
+

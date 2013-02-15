@@ -1,0 +1,27 @@
+﻿$PBExportHeader$getwindowrectheight.srf
+$PBExportComments$Returns windows bounding rect height
+global type getwindowrectheight from function_object
+end type
+
+type prototypes
+function long GetSystemMetrics (long nIndex) library "user32.dll"
+function boolean GetClientRect(ulong hwnd,ref st_rect lpRect) library "user32.dll"
+function boolean GetWindowRect(ulong hwnd,ref st_rect lpRect) library "user32.dll"
+end prototypes
+
+forward prototypes
+global function long getwindowrectheight (powerobject apo_obj)
+end prototypes
+
+global function long getwindowrectheight (powerobject apo_obj);// returns the window bounding rect height (in PB units)
+
+long ll_pbunits
+st_rect rect
+
+getwindowrect( handle(apo_obj), rect)
+ll_pbunits = PixelsToUnits(rect.bottom - rect.top , YPixelsToUnits!)
+
+return ll_pbunits
+
+end function
+

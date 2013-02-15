@@ -1,0 +1,8 @@
+﻿$PBExportHeader$process_info.srs
+global type process_info from structure
+    ulong        hprocess
+    ulong        hthread
+    ulong        dwprocessid
+    ulong        dwthreadid
+end type
+

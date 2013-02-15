@@ -1,0 +1,22 @@
+﻿$PBExportHeader$startup_info.srs
+global type startup_info from structure
+    long        cb
+    string        lpreserved
+    string        lpdesktop
+    string        lptitle
+    ulong        dwx
+    ulong        dwy
+    ulong        dwxsize
+    ulong        dwysize
+    ulong        dwxcountchars
+    ulong        dwycountchars
+    ulong        dwfillattribute
+    ulong        dwflags
+    long        wshowwindow
+    long        cbreserved2
+    long        lpreserved2
+    ulong        hstdinput
+    ulong        hstdoutput
+    ulong        hstderror
+end type
+

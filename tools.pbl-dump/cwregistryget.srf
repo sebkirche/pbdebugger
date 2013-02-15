@@ -1,0 +1,104 @@
+﻿$PBExportHeader$cwregistryget.srf
+global type cwregistryget from function_object
+end type
+
+type prototypes
+FUNCTION long RegOpenKeyEx ( unsignedlong hKey, string lpSubKey, unsignedlong ulOptions, unsignedlong samDesired, ref unsignedlong phkResult ) LIBRARY "ADVAPI32.DLL" ALIAS FOR "RegOpenKeyExA;ansi"
+FUNCTION long RegQueryValueEx ( unsignedlong hKey, string lpValueName, unsignedlong lpReserved, ref unsignedlong lpType, ref blob lpData, ref unsignedlong lpcbData ) LIBRARY "ADVAPI32.DLL" ALIAS FOR "RegQueryValueExA;ansi"
+FUNCTION long RegCloseKey ( unsignedlong hKey ) LIBRARY "ADVAPI32.DLL"
+FUNCTION long RegEnumKey ( unsignedlong hKey, long iSubKey, ref string lpcKeyName, unsignedlong lKeyNameBufferLength ) LIBRARY "ADVAPI32.DLL" ALIAS FOR "RegEnumKeyA;ansi"
+end prototypes
+
+forward prototypes
+global function long cwregistryget (string as_root_key, string as_subkey, string as_keyname, ref string as_result)
+end prototypes
+
+global function long cwregistryget (string as_root_key, string as_subkey, string as_keyname, ref string as_result);long ll_retval = -1
+/*
+!define HKEY_CLASSES_ROOT        0x80000000
+!define HKEY_CURRENT_USER        0x80000001
+!define HKEY_LOCAL_MACHINE       0x80000002
+!define HKEY_USERS               0x80000003
+!define HKEY_PERFORMANCE_DATA    0x80000004
+!define HKEY_PERFORMANCE_TEXT    0x80000050
+!define HKEY_PERFORMANCE_NLSTEXT 0x80000060
+!define HKEY_CURRENT_CONFIG      0x80000005
+!define HKEY_DYN_DATA            0x80000006
+
+!define KEY_QUERY_VALUE          0x0001
+!define KEY_ENUMERATE_SUB_KEYS   0x0008
+
+!define REG_NONE                 0
+!define REG_SZ                   1
+!define REG_EXPAND_SZ            2
+!define REG_BINARY               3
+!define REG_DWORD                4
+!define REG_DWORD_LITTLE_ENDIAN  4
+!define REG_DWORD_BIG_ENDIAN     5
+!define REG_LINK                 6
+!define REG_MULTI_SZ             7
+*/
+//--- REGISTRY ROOT VALUES
+ulong HKEY_CLASSES_ROOT = 2147483648
+ulong HKEY_CURRENT_USER =  HKEY_CLASSES_ROOT + 1
+ulong HKEY_LOCAL_MACHINE =  HKEY_CLASSES_ROOT + 2
+ulong HKEY_USERS = HKEY_CLASSES_ROOT + 3
+ulong HKEY_PERFORMANCE_DATA = HKEY_CLASSES_ROOT + 4
+ulong HKEY_CURRENT_CONFIG = HKEY_CLASSES_ROOT + 5
+ulong HKEY_DYN_DATA = HKEY_CLASSES_ROOT + 6
+ulong HKEY_PERFORMANCE_TEXT = HKEY_CLASSES_ROOT + 80
+ulong HKEY_PERFORMANCE_NLSTEXT = HKEY_CLASSES_ROOT + 96
+
+
+//--- REGISTRY DATATYPE
+long REG_SZ = 1
+long REG_BINARY = 3
+
+blob lbl_buffer
+
+long KEY_READ = 25
+long ERROR_SUCCESS = 0
+long ERROR_NO_MORE_ITEMS = 259
+ulong ll_rootkey
+ulong ll_hkey
+ulong lul_KeyType
+ulong lul_buffersize
+
+choose case upper(as_root_key)
+	case "HKLM", "HKEY_LOCAL_MACHINE"
+		ll_rootkey = HKEY_LOCAL_MACHINE
+	case "HKCU", "HKEY_CURRENT_USER"
+		ll_rootkey = HKEY_CURRENT_USER
+	case "HKCC", "HKEY_CURRENT_CONFIG"
+	case "HKCR", "HKEY_CLASSES_ROOT"
+	case "HKPD", "HKEY_PERFORMANCE_DATA"
+	case "HKPN", "HKEY_PERFORMANCE_NLSTEXT"
+	case "HKPT", "HKEY_PERFORMANCE_TEXT"
+	case "HKUS", "HKEY_USERS"		
+	case else
+		ll_rootkey = HKEY_LOCAL_MACHINE
+end choose
+
+lbl_buffer = Blob( space(32000) )
+lul_buffersize =  len(lbl_buffer)
+lul_KeyType = REG_BINARY
+
+if not RegOpenKeyEx( ll_rootkey,as_SubKey, 0, KEY_READ,ll_hkey) = ERROR_SUCCESS then
+//	debug_message("CWRegistryGet", "Unable to open the key: " + as_root_key+"\"+as_subkey )
+	return ll_retval
+end if
+
+if not (RegQueryValueEx(ll_hKey, as_keyname, 0, lul_KeyType, lbl_buffer, lul_buffersize ) = ERROR_SUCCESS) then
+//	debug_message("CWRegistryGet", "Unable to read the key: " + as_root_key+"\"+as_subkey+":"+as_Keyname+" (KeyType:"+string(lul_KeyType)+")" )
+	return ll_retval
+end if
+
+as_result = string( BlobMid(lbl_buffer,1, lul_buffersize) )
+
+if not RegCloseKey(ll_hKey) = ERROR_SUCCESS THEN
+//	debug_message("CWRegistryGet", "Unable to close the key: " + as_root_key+"\"+as_subkey ) 
+end if
+
+return ll_retval
+end function
+

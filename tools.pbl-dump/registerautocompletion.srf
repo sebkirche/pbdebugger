@@ -1,0 +1,110 @@
+﻿$PBExportHeader$registerautocompletion.srf
+global type registerautocompletion from function_object
+end type
+
+type prototypes
+FUNCTION long SHAutoComplete(ulong hwnd_edit, ulong dwflags) LIBRARY "shlwapi.dll"
+end prototypes
+
+forward prototypes
+global function boolean registerautocompletion (singlelineedit asle_obj)
+end prototypes
+
+global function boolean registerautocompletion (singlelineedit asle_obj);
+long ll_res 
+ulong flag 
+
+constant ulong SHACF_DEFAULT = 					0				// = SHACF_FILESYSTEM | SHACF_URLALL ???
+constant ulong SHACF_FILESYSTEM = 				1
+constant ulong SHACF_URLHISTORY = 				2
+constant ulong SHACF_URLMRU = 					4
+constant ulong SHACF_USETAB = 					8
+constant ulong SHACF_FILESYS_ONLY = 			16				//0x10
+constant ulong SHACF_FILESYS_DIRS = 			32				//0x20
+constant ulong SHACF_VIRTUAL_NAMESPACE = 		64				//0x40
+constant ulong SHACF_URLALL = 					SHACF_URLHISTORY + SHACF_URLMRU
+constant ulong SHACF_AUTOSUGGEST_FORCE_ON =	268435456	//0x10000000
+constant ulong SHACF_AUTOSUGGEST_FORCE_OFF = 536870912	//0x20000000
+constant ulong SHACF_AUTOAPPEND_FORCE_ON =	1073741824	//0x40000000
+constant ulong SHACF_AUTOAPPEND_FORCE_OFF =	2147483648	//0x80000000
+
+flag = SHACF_FILESYSTEM 
+ll_res = SHAutoComplete(Handle(asle_obj ), flag)
+
+return true
+
+/* SRC = http://msdn.microsoft.com/en-us/library/bb759862(VS.85).aspx
+SHAutoComplete Function
+
+Instructs system edit controls to use AutoComplete to help complete URLs or file system paths.
+
+Syntax
+
+    HRESULT SHAutoComplete(      
+        HWND hwndEdit,
+        DWORD dwFlags
+    );
+
+Parameters
+
+    hwndEdit
+        [in] The window handle of a system edit control. Typically, this parameter is the handle of an edit control or the edit control embedded in a ComboBoxEx control.
+    dwFlags
+        [in] The flags to control the operation of SHAutoComplete. The first four flags are used to override the Windows Internet Explorer registry settings. The user can change these settings manually by launching the Internet Options property sheet from the Tools menu and clicking the Advanced tab.
+
+        SHACF_AUTOAPPEND_FORCE_OFF
+            Ignore the registry default and force the AutoAppend feature off. This flag must be used in combination with one or more of the SHACF_FILESYS* or SHACF_URL* flags.
+        SHACF_AUTOAPPEND_FORCE_ON
+            Ignore the registry value and force the AutoAppend feature on. The completed string will be displayed in the edit box with the added characters highlighted. This flag must be used in combination with one or more of the SHACF_FILESYS* or SHACF_URL* flags.
+        SHACF_AUTOSUGGEST_FORCE_OFF
+            Ignore the registry default and force the AutoSuggest feature off. This flag must be used in combination with one or more of the SHACF_FILESYS* or SHACF_URL* flags.
+        SHACF_AUTOSUGGEST_FORCE_ON
+            Ignore the registry value and force the AutoSuggest feature on. A selection of possible completed strings will be displayed as a drop-down list, below the edit box. This flag must be used in combination with one or more of the SHACF_FILESYS* or SHACF_URL* flags.
+        SHACF_DEFAULT
+            The default setting, equivalent to SHACF_FILESYSTEM | SHACF_URLALL. SHACF_DEFAULT cannot be combined with any other flags.
+        SHACF_FILESYS_ONLY
+            Include the file system.
+        SHACF_FILESYS_DIRS
+            Include the file system as in SHACF_FILESYS_ONLY plus directories, Universal Naming Convention (UNC) servers, and UNC server shares.
+        SHACF_FILESYSTEM
+            Include all .
+        SHACF_URLALL
+            Include the URLs in the users History and Recently Used lists. Equivalent to SHACF_URLHISTORY | SHACF_URLMRU.
+        SHACF_URLHISTORY
+            Include the URLs in the user's History list.
+        SHACF_URLMRU
+            Include the URLs in the user's Recently Used list.
+        SHACF_USETAB
+            Allow the user to select from the autosuggest list by pressing the TAB key. If this flag is not set, pressing the TAB key will shift focus to the next control and close the autosuggest list. If SHACF_USETAB is set, pressing the TAB key will select the first item in the list. Pressing TAB again will select the next item in the list, and so on. When the user reaches the end of the list, the next TAB key press will cycle the focus back to the edit control. This flag must be used in combination with one or more of the SHACF_FILESYS* or SHACF_URL* flags.
+        SHACF_VIRTUAL_NAMESPACE
+
+Return Value
+
+    Remarks
+
+        SHAutoComplete works on any system edit control, including the edit control and controls that contain edit controls such as ComboBoxEx controls. 
+		  To retrieve a handle to an edit control embedded in a ComboBoxEx control, send the ComboBoxEx control a CBEM_GETEDITCONTROL message.
+
+        SHAutoComplete should not be called more than once with the same HWND. Doing so results in a memory leak. 
+		  It prevents the original resources from being released, including the previous instance of the AutoComplete object, enumerator objects that
+		  the previous AutoComplete object has referenced, and Microsoft Windows Graphics Device Interface (GDI) resources. Rather than call SHAutoComplete 
+		  again with a different set of flags to change the AutoComplete list, call CoCreateInstance with CLSID_AutoComplete to obtain the AutoComplete object. 
+		  Then pass the HWND to the object to initialize it and provide your own custom enumerator. You can use CLSID_ACLMulti if you want AutoComplete 
+		  to use multiple lists.
+
+        An application must have invoked either CoInitialize or OleInitialize prior to calling this function. CoUninitialize or OleUninitialize cannot be called until the edit box 
+		  has finished processing the WM_DESTROY message for hwndEdit.
+
+        The maximum number of items that can be displayed in an autosuggest drop-down list box is 1000.
+
+    Function Information
+
+        Minimum DLL Version	shlwapi.dll version 5.0 or later
+        Custom Implementation	No
+        Header	shlwapi.h
+        Import library	shlwapi.lib
+        Minimum operating systems	Windows 2000, Windows NT 4.0 with Internet Explorer 5, Windows 98, Windows 95 with Internet Explorer 5
+
+*/
+end function
+

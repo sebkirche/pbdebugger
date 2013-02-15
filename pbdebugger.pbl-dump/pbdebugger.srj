@@ -1,0 +1,38 @@
+﻿$PBExportHeader$pbdebugger.srj
+EXE:pbdebugger.exe,,0,0,1
+CMP:0,0,0,2,0,0,1
+COM:Sybase, Inc.
+DES:Sybase, Inc. Product File
+CPY:
+PRD:PowerBuilder Enterprise Series
+PVS:1.0.0.1
+PVN:1,0,0,1
+FVS:1.0.0.1
+FVN:1,0,0,1
+MAN:0,asInvoker,0
+PBD:pbdebugger.pbl,,0
+PBD:tools.pbl,,0
+PBD:pbnihash.pbd,,0
+PBD:pbniregex.pbd,,0
+PBD:pbnicw.pbd,,0
+OBJ:C:\Dev\powerbuilder\pbdebug\pbnicw.pbd,cwsetfield,f
+OBJ:c:\dev\powerbuilder\pbdebug\tools.pbl,getwindowrectwidth,f
+OBJ:c:\dev\powerbuilder\pbdebug\tools.pbl,str_point,s
+OBJ:c:\dev\powerbuilder\pbdebug\tools.pbl,getwindowrectheight,f
+OBJ:c:\dev\powerbuilder\pbdebug\pbdebugger.pbl,debug_event,s
+OBJ:c:\dev\powerbuilder\pbdebug\pbdebugger.pbl,create_thread_debug_info,s
+OBJ:C:\Dev\powerbuilder\pbdebug\pbdebugger.pbl,pbdebugger,a
+OBJ:c:\dev\powerbuilder\pbdebug\tools.pbl,hasmethod,f
+OBJ:c:\dev\powerbuilder\pbdebug\tools.pbl,u_scilexer,u
+OBJ:c:\dev\powerbuilder\pbdebug\pbdebugger.pbl,process_info,s
+OBJ:c:\dev\powerbuilder\pbdebug\pbdebugger.pbl,load_dll_debug_info,s
+OBJ:c:\dev\powerbuilder\pbdebug\tools.pbl,nv_auto_resizer,u
+OBJ:c:\dev\powerbuilder\pbdebug\tools.pbl,registerautocompletion,f
+OBJ:c:\dev\powerbuilder\pbdebug\tools.pbl,w_response_ancestor,w
+OBJ:c:\dev\powerbuilder\pbdebug\pbdebugger.pbl,output_debug_string_info,s
+OBJ:c:\dev\powerbuilder\pbdebug\pbdebugger.pbl,create_process_debug_info,s
+OBJ:c:\dev\powerbuilder\pbdebug\tools.pbl,st_rect,s
+OBJ:c:\dev\powerbuilder\pbdebug\pbdebugger.pbl,startup_info,s
+OBJ:c:\dev\powerbuilder\pbdebug\tools.pbl,str_minmaxinfo,s
+OBJ:C:\Dev\powerbuilder\pbdebug\pbnicw.pbd,cwgetfield,f
+OBJ:c:\dev\powerbuilder\pbdebug\pbdebugger.pbl,w_mdi_frame,w

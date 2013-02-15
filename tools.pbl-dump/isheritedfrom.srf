@@ -1,0 +1,27 @@
+﻿$PBExportHeader$isheritedfrom.srf
+global type isHeritedFrom from function_object
+end type
+
+forward prototypes
+global function boolean isheritedfrom (string as_class, powerobject apo_object)
+end prototypes
+
+global function boolean isheritedfrom (string as_class, powerobject apo_object);/*
+ * Look if a powerobject is herited from the as_class .
+ *
+ */ 
+ClassDefinition lcd_child
+string ls_classname
+
+if isnull( apo_object ) or not isvalid( apo_object ) then return false
+lcd_child = apo_object.classdefinition
+
+do while true
+	ls_classname = lcd_child.name
+	if ls_classname = as_class then return true
+	lcd_child = lcd_child.Ancestor
+	if isnull( lcd_child ) then return false
+loop
+
+end function
+

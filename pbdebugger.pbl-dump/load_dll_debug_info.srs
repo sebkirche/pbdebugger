@@ -1,0 +1,10 @@
+﻿$PBExportHeader$load_dll_debug_info.srs
+global type load_dll_debug_info from structure
+	ulong hFile
+	ulong lpBaseOfDll
+	ulong dwDebugInfoFileOffset
+	ulong nDebugInfoSize
+	ulong lpImageName
+	uint fUnicode
+end type
+

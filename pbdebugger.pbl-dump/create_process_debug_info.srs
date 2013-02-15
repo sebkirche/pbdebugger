@@ -1,0 +1,14 @@
+﻿$PBExportHeader$create_process_debug_info.srs
+global type create_process_debug_info from structure
+	ulong hFile
+	ulong hProcess
+	ulong hThread
+	ulong lpBaseOfImage
+	ulong dwDebugInfoFileOffset
+	ulong nDebugInfoSize
+	ulong lpThreadLocalBase
+	ulong lpStartAddress
+	ulong lpImageName
+	uint fUnicode
+end type
+

@@ -1,0 +1,9 @@
+﻿$PBExportHeader$str_minmaxinfo.srs
+global type str_minmaxinfo from structure
+	str_point		ptreserved
+	str_point		ptmaxsize
+	str_point		ptmaxposition
+	str_point		ptmintracksize
+	str_point		ptmaxtracksize
+end type
+

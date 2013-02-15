@@ -1,0 +1,6 @@
+﻿$PBExportHeader$str_point.srs
+global type str_point from structure
+	long		lx
+	long		ly
+end type
+

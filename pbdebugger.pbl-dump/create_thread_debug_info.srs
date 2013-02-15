@@ -1,0 +1,7 @@
+﻿$PBExportHeader$create_thread_debug_info.srs
+global type create_thread_debug_info from structure
+	ulong hThread
+	ulong lpThreadLocalBase
+	ulong lpStartAddress
+end type
+

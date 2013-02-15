@@ -1,0 +1,8 @@
+﻿$PBExportHeader$debug_event.srs
+global type debug_event from structure
+	ulong dwDebugEventCode
+	ulong dwProcessId
+	ulong dwThreadId
+	byte sub_event[84]
+end type
+

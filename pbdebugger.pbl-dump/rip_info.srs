@@ -1,0 +1,6 @@
+﻿$PBExportHeader$rip_info.srs
+global type rip_info from structure
+	unsignedlong		dwerror
+	unsignedlong		dwtype
+end type
+

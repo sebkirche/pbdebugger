@@ -1,0 +1,23 @@
+﻿$PBExportHeader$pop_str.srf
+global type pop_str from function_object
+end type
+
+forward prototypes
+global function string pop_str (ref string as_str, string as_lookup)
+end prototypes
+
+global function string pop_str (ref string as_str, string as_lookup);/*
+ * Author : geni
+ * date : 12/07/2007 
+ *
+ * extract the first-left substring separated by as_lookup string from as_str; and return it
+ */
+string sub_string
+int i
+i = pos( as_str, as_lookup )
+sub_string = mid( as_str, 1, i - len( as_lookup ) )
+as_str = mid( as_str, i + len( as_lookup ) )
+
+return sub_string
+end function
+

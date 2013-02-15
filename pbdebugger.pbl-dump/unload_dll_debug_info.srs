@@ -1,0 +1,5 @@
+﻿$PBExportHeader$unload_dll_debug_info.srs
+global type unload_dll_debug_info from structure
+	ulong lpBaseOfDll
+end type
+

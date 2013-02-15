@@ -1,0 +1,9 @@
+﻿$PBExportHeader$st_rect.srs
+$PBExportComments$Struct RECT for api calls
+global type st_rect from structure
+	long		Left
+	long		Top
+	long		Right
+	long		Bottom
+end type
+

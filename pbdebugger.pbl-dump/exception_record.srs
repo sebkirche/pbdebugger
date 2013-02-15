@@ -1,0 +1,10 @@
+﻿$PBExportHeader$exception_record.srs
+global type exception_record from structure
+  ulong ExceptionCode
+  ulong ExceptionFlags;
+  ulong ExceptionRecordPtr
+  ulong ExceptionAddress
+  ulong NumberParameters
+  ulong ExceptionInformation[15]
+end type
+
